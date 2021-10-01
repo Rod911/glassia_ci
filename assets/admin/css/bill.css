@@ -1,0 +1,272 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	color: #000;
+	font: inherit;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+	font-weight: 500;
+	font-family: sans-serif;
+}
+
+body {
+	padding: 20px;
+	width: 210mm;
+	height: 297mm;
+	margin: auto;
+	line-height: normal;
+}
+
+@page {
+	size: A4;
+	margin: 0;
+}
+
+p {
+	margin-bottom: 0;
+}
+
+.main {
+	border: 2px solid #000;
+	border-collapse: collapse;
+	width: 100%;
+	height: 100%;
+}
+
+.main td {
+	border: 1px solid #000;
+}
+
+.top {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	padding: 5px;
+}
+
+.top-label {
+	margin-bottom: auto;
+	width: 33%;
+}
+
+.top-label p {
+	display: inline-block;
+	padding: 2px;
+	border: 1px solid #000;
+	font-weight: 600;
+}
+
+.top-head {
+	margin: auto;
+	text-align: center;
+	font-weight: 600;
+	width: 33%;
+}
+
+.top-head img {
+	margin: auto;
+	display: block;
+	margin-top: 15px;
+	height: 50px;
+	border-bottom: 1px solid #000;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+}
+
+.top-bill {
+	width: 33%;
+	margin-top: auto;
+	text-align: right;
+}
+
+.bill-no {
+	padding-left: 30px;
+	text-align: left;
+}
+
+.bill-no strong {
+	font-weight: 600;
+}
+
+.address {
+	background-color: #dadada;
+	padding: 5px;
+	text-align: center;
+}
+
+.mid-1 {
+	display: flex;
+	padding: 5px 15px;
+}
+
+.mid-gst {
+	flex: 1 1 70%;
+}
+
+.mid-gst p {
+	font-weight: 600;
+	font-size: 18px;
+}
+
+.mid-datetime {
+	flex: 1 1 30%;
+}
+
+.mid-2 {
+	padding: 5px 15px;
+}
+
+.mid-row {
+	display: flex;
+}
+
+.mid-left {
+	width: 70%;
+}
+
+.mid-right {
+	margin-left: 15px;
+	width: 31%;
+}
+
+td.particulars-cell {
+	border: none;
+}
+
+.particulars {
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+}
+
+.particulars th {
+	border: 1px solid #000;
+	padding: 7px 15px;
+	white-space: nowrap;
+	background-color: #dadada;
+	font-weight: 600;
+}
+
+.particulars-col {
+	width: 100%;
+}
+
+.particulars td {
+	padding: 5px;
+}
+
+.main .particulars tfoot td {
+	padding: 10px;
+}
+
+.particulars tfoot td p {
+	font-size: 18px;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+.particulars th:first-child,
+.particulars td:first-child {
+	border-left: 0;
+}
+
+.particulars th:last-child,
+.particulars td:last-child {
+	border-right: 0;
+}
+
+.particulars tr.spacer-row {
+	height: 100%;
+}
+
+.main tfoot td {
+	padding: 5px 10px;
+}
+
+.main tfoot p {
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.main tfoot strong {
+	font-weight: 600;
+}
+
+.main small {
+	font-size: 10px;
+	display: flex;
+	font-weight: 100;
+}
+
+.main small strong {
+	margin-right: 5px;
+}
+
+.main tfoot img {
+	display: inline-block;
+	height: 35px;
+	padding-bottom: 3px;
+	margin-left: 10px;
+	border-bottom: 1px solid;
+}
+
+.dotted {
+	display: flex;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.dotted span {
+	flex: 1 1 auto;
+	border-bottom: 1px dotted;
+	margin-bottom: 4px;
+	margin-left: 5px;
+}
+
+.sl-cell {
+	text-align: center;
+}
+
+.amt-cell {
+	text-align: right;
+}
+
+
+.print-action {
+	margin-top: 15px;
+	text-align: center;
+}
+
+.print-action .btn {
+	margin-bottom: 30px;
+}
+
+.print-btn {
+	display: inline-block;
+	padding: 10px 25px;
+	border: 1px solid #dadada;
+	background-color: #008758;
+	color: #fff;
+	border-radius: 5px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.print-btn-b {
+	background-color: #006af6;
+}
+
+/* Hosting overlay */
+.print-action+div {
+	visibility: hidden;
+}
+
+@media print {
+	.print-action {
+		display: none;
+	}
+}
