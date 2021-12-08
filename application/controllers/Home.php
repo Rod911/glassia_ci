@@ -38,6 +38,7 @@ class Home extends CI_Controller {
 		}
 		$post['towards'] = $this->input->post('to');
 		$post['worksite'] = $this->input->post('worksite');
+		$post['address'] = $this->input->post('address');
 		$post['vehicle'] = $this->input->post('vehicle');
 		$post['buyer_tin'] = $this->input->post('buyer_tin');
 		$post['tax_type'] = $this->input->post('tax_type');

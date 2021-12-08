@@ -62,17 +62,59 @@ function getIndianCurrency(float $number) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Glassia</title>
-	
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<link rel="stylesheet" href="<?= as_base_url('admin/css/bill.css') ?>">
+	<link rel="stylesheet" href="<?= as_base_url('admin/css/bill.css?v=' . css_version()) ?>">
 </head>
 
 <body>
+	<header class="bill-header">
+		<?php
+		if ($invoice['invoice_type'] == 't') {
+		?>
+			<p>TAX INVOICE</p>
+		<?php
+		} else {
+		?>
+			<p>PROFORMA INVOICE</p>
+		<?php
+		}
+		?>
+	</header>
 	<table class="main">
 		<thead>
 			<tr>
-				<td colspan="3">
-					<div class="top">
+				<td colspan="3" class="top-cell">
+					<table class="top-table">
+						<tbody>
+							<tr>
+								<td rowspan="3" class="top-table-left">
+									<img src="<?= as_base_url('admin/img/logo.png') ?>" alt="" class="top-img">
+									<!-- <p>Glassia Solutions</p> -->
+									<p>D. No. 3-2(1) Nandadeep Industries Compound, Maryhill, Mangaluru 575008</p>
+									<p>GSTIN: 29ACBPH6632C1ZX</p>
+								</td>
+								<td class="top-table-right top-table-1">BILL NO: <span><strong><?= $invoice['bill_no'] ?></strong></span></td>
+							</tr>
+							<tr>
+								<td class="top-table-right">Date: <span><?= date('d-m-Y', strtotime($invoice['date'])) ?></span></td>
+							</tr>
+							<tr>
+								<td class="top-table-right">Time: <span><?= $invoice['time'] ?></span></td>
+							</tr>
+							<tr>
+								<td class="top-table-2">
+									<p>To: <span><?= $invoice['towards'] ?></span></p>
+									<p><?= $invoice['address'] ?></p>
+									<p>Buyer's TIN: <span><?= $invoice['buyer_tin'] ?></span></p>
+								</td>
+								<td>
+									<p>Delivery To: <span><?= $invoice['worksite'] ?></span></p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- <div class="top">
 						<div class="top-label">
 							<?php
 							if ($invoice['invoice_type'] == 't') {
@@ -83,17 +125,6 @@ function getIndianCurrency(float $number) {
 							?>
 						</div>
 						<div class="top-head">
-							<?php
-							if ($invoice['invoice_type'] == 't') {
-							?>
-								<p>CASH / CREDIT</p>
-							<?php
-							} else {
-							?>
-								<p>PROFORMA INVOICE</p>
-							<?php
-							}
-							?>
 							<img src="<?= as_base_url('admin/img/logo.png') ?>" alt="">
 						</div>
 						<div class="top-bill">
@@ -105,17 +136,17 @@ function getIndianCurrency(float $number) {
 							}
 							?>
 						</div>
-					</div>
+					</div> -->
 				</td>
 			</tr>
-			<tr>
+			<!-- <tr>
 				<td colspan="3">
 					<div class="address">
-						<p>204 Pyramid Heights, Padil, Mangalore, 575007. Cell 8792798002</p>
+						<p>D. No. 3-2(1) Nandadeep Industries Compound, Maryhill, Mangaluru 575008</p>
 					</div>
 				</td>
-			</tr>
-			<tr>
+			</tr> -->
+			<!-- <tr>
 				<td colspan="3">
 					<div class="mid-1">
 						<div class="mid-gst">
@@ -134,7 +165,7 @@ function getIndianCurrency(float $number) {
 						<p class="dotted">Worksite: <span><?= $invoice['worksite'] ?></span></p>
 					</div>
 				</td>
-			</tr>
+			</tr> -->
 		</thead>
 		<tbody>
 			<tr>
@@ -235,7 +266,7 @@ function getIndianCurrency(float $number) {
 				</td>
 			</tr>
 		</tbody>
-		<tfoot>
+		<tfoot class="main-foot">
 			<tr>
 				<td>
 					<p class="dotted"><strong>Vehicle No:</strong> <span><?= $invoice['vehicle'] ?></span></p>
@@ -250,8 +281,8 @@ function getIndianCurrency(float $number) {
 				</td>
 				<td>
 					<p>For <img src="<?= as_base_url('admin/img/logo.png') ?>" alt=""></p>
-					<!-- <p class="dotted"><span><img src="./assets/img/sign.png" alt="" height="50px" style="border: 0; display: block; margin: auto; height: 50px;"></span></p>
-					<p>Authorised Signatory</p> -->
+					<p class="dotted"><span><img src="" alt="" height="40px" style="border: 0; display: block; margin: auto; height: 40px;"></span></p>
+					<p style="text-align: center;">Authorised Signatory</p>
 				</td>
 			</tr>
 		</tfoot>

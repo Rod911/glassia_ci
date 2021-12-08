@@ -40,7 +40,7 @@
 	<div class="mb-3 row">
 		<label for="to" class="col-sm-2 col-form-label">To</label>
 		<div class="col-sm-10">
-			<textarea name="to" id="to" rows="1" class="form-control auto-grow"><?= $invoice['towards'] ?? '' ?></textarea>
+			<input type="text" class="form-control" id="to" name="to" value="<?= $invoice['towards'] ?? '' ?>">
 		</div>
 	</div>
 	<div class="mb-3 row">
@@ -50,7 +50,13 @@
 		</div>
 	</div>
 	<div class="mb-3 row">
-		<label for="worksite" class="col-sm-2 col-form-label">Worksite</label>
+		<label for="address" class="col-sm-2 col-form-label">Address</label>
+		<div class="col-sm-10">
+			<textarea name="address" id="address" rows="3" class="form-control auto-grow"><?= $invoice['address'] ?? '' ?></textarea>
+		</div>
+	</div>
+	<div class="mb-3 row">
+		<label for="worksite" class="col-sm-2 col-form-label">Delivery To</label>
 		<div class="col-sm-10">
 			<input type="text" class="form-control" id="worksite" name="worksite" value="<?= $invoice['worksite'] ?? '' ?>">
 		</div>

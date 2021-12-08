@@ -8,7 +8,7 @@
 }
 
 html {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 500;
 	font-family: sans-serif;
 }
@@ -30,11 +30,57 @@ p {
 	margin-bottom: 0;
 }
 
+.bill-header {
+	text-align: center;
+	padding-bottom: 5px;
+	font-weight: 500;
+}
+
+.main td.top-cell {
+	border: 0;
+}
+
+.top-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.top-img {
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.top-table td {
+	width: 50%;
+	padding: 5px;
+}
+
+.top-table .top-table-left {
+	border: 0;
+}
+
+.top-table .top-table-right {
+	border-right: 0;
+}
+
+.top-table-1 {
+	border-top: 0 !important;
+}
+
+.top-table tr:last-child td {
+	border-bottom: 0;
+	vertical-align: top;
+}
+
+.top-table-2 {
+	border-left: 0 !important;
+}
+
 .main {
-	border: 2px solid #000;
+	border: 1px solid #000;
 	border-collapse: collapse;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 26px);
 }
 
 .main td {
@@ -104,16 +150,16 @@ p {
 }
 
 .mid-gst {
-	flex: 1 1 70%;
+	flex: 1 1 65%;
 }
 
 .mid-gst p {
 	font-weight: 600;
-	font-size: 18px;
+	font-size: 16px;
 }
 
 .mid-datetime {
-	flex: 1 1 30%;
+	flex: 1 1 35%;
 }
 
 .mid-2 {
@@ -125,12 +171,12 @@ p {
 }
 
 .mid-left {
-	width: 70%;
+	width: 64%;
 }
 
 .mid-right {
-	margin-left: 15px;
-	width: 31%;
+	margin-left: 1%;
+	width: 35%;
 }
 
 td.particulars-cell {
@@ -145,10 +191,11 @@ td.particulars-cell {
 
 .particulars th {
 	border: 1px solid #000;
-	padding: 7px 15px;
+	padding: 7px 10px;
 	white-space: nowrap;
 	background-color: #dadada;
 	font-weight: 600;
+	/* border-top: 0; */
 }
 
 .particulars-col {
@@ -156,15 +203,20 @@ td.particulars-cell {
 }
 
 .particulars td {
-	padding: 5px;
+	padding: 1px 10px;
+}
+
+.particulars tbody td {
+	border-top: 0;
+	border-bottom: 0;
 }
 
 .main .particulars tfoot td {
-	padding: 10px;
+	padding: 5px 10px;
 }
 
 .particulars tfoot td p {
-	font-size: 18px;
+	font-size: 16px;
 	margin-bottom: 0;
 	margin-top: 0;
 }
@@ -187,9 +239,13 @@ td.particulars-cell {
 	padding: 5px 10px;
 }
 
+.main-foot td {
+	border-top: 0;
+}
+
 .main tfoot p {
-	font-size: 14px;
-	margin-bottom: 10px;
+	font-size: 13px;
+	margin-bottom: 2px;
 }
 
 .main tfoot strong {
