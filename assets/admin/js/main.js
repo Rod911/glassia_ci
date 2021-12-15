@@ -1,54 +1,18 @@
 var dtable = null;
 $(function () {
-
-	$.validator.methods.email = function (value, element) {
-		return this.optional(element) || /^.+@.+\..+$/.test(value);
-	}
-	$('.validate-form').validate();
 	var select2Config = {
 		placeholder: "Select",
-		theme: "bootstrap"
+		theme: "bootstrap-5",
+		allowClear: true,
 	}
 	$('.select-widget').select2(select2Config);
-	$('.date-widget').datetimepicker({
-		format: 'D MMM, YYYY',
+	$(document).on('select2:open', () => {
+		document.querySelector(".select2-container--open .select2-search__field").focus()
 	});
-	if ($('.datepicker').length > 0) {
-		$('.datepicker').datetimepicker({
-			format: 'DD-MM-YYYY',
-			useCurrent: false,
-		});
-	}
-	$('.wysiwyg-editor').summernote({
-		toolbar: [
-			['style', ['style', 'bold', 'italic', 'underline', 'clear']],
-			['font', ['strikethrough', 'superscript', 'subscript']],
-			['fontsize', ['fontsize']],
-			['color', ['color']],
-			['para', ['ul', 'ol', 'paragraph', 'hr']],
-			['edit', ['fullscreen', 'codeview', 'undo', 'redo', 'help']]
-		],
-		height: 250
-	});
-
 
 	var href = window.location.origin + window.location.pathname;
 	var activePage = $('a[href="' + href + '"');
-	var activeLi = activePage.parent("li");
-	activeLi.addClass("active");
-	if (activeLi[0]) {
-		activeLi[0].scrollIntoView({
-			behavior: "instant",
-			block: "center"
-		});
-		setTimeout(() => {
-			activeLi[0].scrollIntoView({
-				behavior: "instant",
-				block: "center"
-			});
-		}, 200);
-	}
-	activePage.parents("li.nav-item").children("a").click();
+	activePage.addClass("active");
 
 	$("body").on("input", ".numeric", function (e) {
 		var currencyType = this.hasAttribute("data-currency");
@@ -119,6 +83,19 @@ $(function () {
 		if (hideBtn == '1') {
 			showBtn = false;
 		}
+		swal.fire({
+			title: 'Loading...',
+			html: ' ',
+			showConfirmButton: showBtn,
+			customClass: {
+				popup: modalSize
+			},
+			showCloseButton: true,
+			// showCancelButton: true,
+			didOpen: () => {
+				Swal.showLoading()
+			},
+		})
 		$.post({
 			url: BASEURL + 'ajax/' + url,
 			data: {
@@ -126,117 +103,25 @@ $(function () {
 			},
 			dataType: 'JSON',
 			success: function (res) {
-				swal.fire({
-					title: res.title,
-					html: res.content,
-					showConfirmButton: showBtn,
-					customClass: {
-						popup: modalSize
-					},
-				})
+				Swal.hideLoading();
+				$("#swal2-title").text(res.title);
+				$("#swal2-html-container").html(res.content);
 			}
 		});
 	});
 
-	$(document).on('click', '.delete-record', function () {
-		var dataID = $(this).attr('data-id');
-		Swal.fire({
-			title: 'Are you sure?',
-			text: "You won't be able to revert this!",
-			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#d33',
-			cancelButtonColor: '#3085d6',
-			confirmButtonText: 'Delete!'
-		}).then((result) => {
-			if (result.isConfirmed) {
-				$.post({
-					url: BASEURL + 'admin/ajax/delete_record',
-					data: {
-						id: dataID,
-					},
-					dataType: 'JSON',
-					success: function (res) {
-						dtable.ajax.reload()
-						if (res.success) {
-							Swal.fire(
-								'Deleted!',
-								'',
-								'success'
-							)
-						} else if (res.map_view) {
-							Swal.fire({
-								title: 'Cannot delete this item',
-								html: res.map_view
-							});
-						} else {
-							Swal.fire(
-								'Could not delete!',
-								'Refresh page or try again',
-								'error',
-							)
-						}
-					}
-				})
-			}
-		})
-	})
-
-	$(document).on('click', '.update-status', function () {
-		$(this).removeClass(disabledStatusClass, enabledStatusClass).addClass(processingStatusClass).html(processingStatusIcon);
-		var dataID = $(this).data('id');
-		$.post({
-			url: BASEURL + 'admin/ajax/status_update_record',
-			data: {
-				id: dataID,
-			},
-			dataType: 'JSON',
-			success: function (res) {
-				dtable.ajax.reload()
-				if (!res.success) {
-					Swal.fire(
-						'Could not delete!',
-						'Refresh page or try again',
-						'error',
-					)
-				}
-			}
-		});
-	})
-
-	var disabledStatusClass = 'btn-info';
-	var enabledStatusClass = 'btn-success';
-	var processingStatusClass = 'btn-border btn-primary';
-	var disabledStatusIcon = '<i class="fa fa-fw fa-ban"></i>';
-	var enabledStatusIcon = '<i class="fa fa-fw fa-check"></i>';
-	var processingStatusIcon = '<i class="loader loader-sm table-btn-spinner"></i>'
-	dtable = $("[data-ajax-url]").DataTable({
-		"bProcessing": true,
-		"bServerSide": true,
-		"ordering": false,
-		"sAjaxSource": $(this).attr('data-ajax-url'),
-		"bJQueryUI": true,
-		"sPaginationType": "full_numbers",
-		'iDisplayLength': 10,
-		"oLanguage": {
-			"sProcessing": "Loading...",
+	dtable = $("#d-table").DataTable({
+		bProcessing: true,
+		bServerSide: true,
+		ordering: false,
+		sAjaxSource: $(this).attr('data-ajax-url'),
+		bJQueryUI: true,
+		sPaginationType: "full_numbers",
+		iDisplayLength: 10,
+		oLanguage: {
+			sProcessing: "Loading...",
 		},
-		"fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-			// console.log(this);
-			// console.log(iDisplayIndexFull);
-			var page = this.api().page();
-			var length = this.api().context[0]._iDisplayLength;
-			var index = (page * length + (iDisplayIndex + 1));
-			$('td:eq(0)', nRow).html(index);
-			var statusBtn = $('.update-status', nRow);
-			var currentStatus = $(statusBtn).data('status');
-			if (currentStatus == '0') {
-				$(statusBtn).removeClass(enabledStatusClass).addClass(disabledStatusClass).html(disabledStatusIcon)
-			} else {
-				$(statusBtn).removeClass(disabledStatusClass).addClass(enabledStatusClass).html(enabledStatusIcon)
-			}
-		},
-		'fnServerData': function (sSource, aoData, fnCallback) {
+		fnServerData: function (sSource, aoData, fnCallback) {
 			var filter = null;
 			if (typeof getFilter === "function") {
 				filter = getFilter();
@@ -251,10 +136,10 @@ $(function () {
 				aoDataObj.columns.value[ci].orderable = false;
 			});
 			$.ajax({
-				'dataType': 'json',
-				'type': 'POST',
-				'url': $(this).attr('data-ajax-url'),
-				'data': {
+				dataType: 'json',
+				type: 'POST',
+				url: $(this).attr('data-ajax-url'),
+				data: {
 					filter: filter,
 					sEcho: '1',
 					columns: aoDataObj.columns.value,
@@ -270,7 +155,6 @@ $(function () {
 			});
 		}
 	});
-
 	// Input File Image
 
 	function readURL(input) {

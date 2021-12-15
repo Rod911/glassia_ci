@@ -39,6 +39,11 @@ class Ajaxtables extends CI_Controller {
 		$this->datatables
 			->select('bill_no, towards, invoice_total, date')
 			->add_column(
+				'receipt',
+				'<button class="btn btn-info btn-sm" data-popup-view="add_receipt" data-no-btn=1 data-modal-size="swal-wide" data-id=$1><i class="bi bi-cash"></i> Receipt</button>',
+				'bill_no'
+			)
+			->add_column(
 				'edit',
 				'<a href="' . base_url('home/form?edit=$1') . '" class="btn btn-primary btn-sm"><i class="bi bi-receipt-cutoff"></i> Edit</a>',
 				'bill_no'
@@ -49,7 +54,24 @@ class Ajaxtables extends CI_Controller {
 				'bill_no'
 			)
 			->from('tax_invoices');
-		$this->setSearchableColumns([0, 1]);
+		$this->setSearchableColumns([0, 1, 3]);
 		echo $this->datatables->generate();
+	}
+
+	public function receipts() {
+		$this->db->order_by('bill_no', 'DESC');
+		$this->datatables->where('towards', $this->input->post('filter')['towards']);
+		$this->datatables
+			->select('t.bill_no, invoice_total, t.date as invoice_date, r.date as received_date, IFNULL(received_amt, 0) as received_amt, (invoice_total - IFNULL(received_amt, 0)) as pending_amount')
+			->add_column(
+				'bill',
+				'<a href="' . base_url('home/bill_view/$1') . '" class="btn btn-success btn-sm"><i class="bi bi-save"></i> Bill</a>',
+				'bill_no'
+			)
+			->from('tax_invoices t')
+			->join('payment_receipts r', 'r.bill_no = t.bill_no', 'LEFT');
+		$this->setSearchableColumns([0, 1, 2, 3, 4, 5]);
+		echo $this->datatables->generate();
+		// echo $this->db->last_query();
 	}
 }

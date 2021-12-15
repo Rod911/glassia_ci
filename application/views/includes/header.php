@@ -13,12 +13,17 @@
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
 	<meta name="theme-color" content="#7952b3">
 
-	<link rel="stylesheet" href="<?= as_base_url('admin/css/main.css') ?>">
+	<link rel="stylesheet" href="<?= as_base_url('plugins/sweetalert/sweetalert2.min.css') ?>">
+	<link rel="stylesheet" href="<?= as_base_url('admin/css/main.css?v=' . css_version()) ?>">
 
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
+	<script src="<?= as_base_url('plugins/jquery-3.6.0.min.js') ?>"></script>
+	<script>
+		const BASEURL = '<?= base_url() ?>';
+	</script>
 </head>
 
 <body>
@@ -41,7 +46,10 @@
 				<div class="position-sticky pt-3">
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link active" aria-current="page" href="<?= base_url() ?>"><i class="bi bi-receipt-cutoff bi-lg"></i> Invoices</a>
+							<a class="nav-link" aria-current="page" href="<?= base_url() ?>"><i class="bi bi-receipt-cutoff bi-lg"></i> Invoices</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" aria-current="page" href="<?= base_url('home/receipts') ?>"><i class="bi bi-cash bi-lg"></i> Receipts</a>
 						</li>
 					</ul>
 				</div>

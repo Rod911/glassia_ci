@@ -2,6 +2,10 @@
 	--top-bar-height: 48px;
 }
 
+body {
+	min-height: 100vh;
+}
+
 .navbar {
 	height: var(--top-bar-height);
 }
@@ -63,3 +67,6 @@
 	max-width: 100%;
 }
 
+.swal-wide {
+	width: 40rem;
+}

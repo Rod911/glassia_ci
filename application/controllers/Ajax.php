@@ -6,6 +6,17 @@ class Ajax extends CI_Controller {
 		parent::__construct();
 	}
 
+	public function add_receipt() {
+		$bill_no = $this->input->post('value');
+		$data = $this->db->get_where('tax_invoices', ['bill_no' => $bill_no], 1)->row_array();
+		$view = [
+			'title' => 'Payment Received',
+			'content' => $this->load->view('ajax/add_receipt', $data, true),
+			'data' => $data,
+		];
+		echo json_encode($view);
+	}
+
 	public function placeholder_img() {
 
 		// Dimensions

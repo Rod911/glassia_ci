@@ -96,4 +96,38 @@ class Home extends CI_Controller {
 
 		$this->load->view('bill', $data);
 	}
+
+	public function receipts() {
+		$toward_options = $this->db
+			->select('TRIM(towards) as towards')
+			->group_by('towards')
+			->order_by('towards', 'ASC')
+			->from('tax_invoices')
+			->get()
+			->result_array();
+		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
+		$this->load->view('receipts', $data);
+	}
+
+	public function submit_receipt() {
+		$bill_no = $this->input->post('bill_no');
+		$date = $this->input->post('date');
+		$received_amt = $this->input->post('received_amt');
+
+		$data = $this->db->get_where('tax_invoices', ['bill_no' => $bill_no], 1)->row_array();
+		if ($received_amt > $data['invoice_total']) {
+			redirect(base_url());
+			return;
+		}
+
+		$post_receipt = [
+			'bill_no' => $bill_no,
+			'date' => date('Y-m-d', strtotime($date)),
+			'received_amt' => $received_amt,
+			'created_date' => date('Y-m-d'),
+		];
+
+		$this->db->insert('payment_receipts', $post_receipt);
+		redirect(base_url('home/receipts?towards=' . $data['towards']));
+	}
 }
