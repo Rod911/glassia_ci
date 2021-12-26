@@ -171,4 +171,59 @@ $(function () {
 	$(document).on('change', '.input-file-image input[type="file"]', function () {
 		readURL(this);
 	});
+
+	$(document).on('click', '.delete-record', function () {
+		var dataID = $(this).attr('data-id');
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#d33',
+			cancelButtonColor: '#3085d6',
+			confirmButtonText: 'Delete!'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.post({
+					url: BASEURL + 'ajax/delete_record',
+					data: {
+						id: dataID,
+					},
+					dataType: 'JSON',
+					success: function (res) {
+						dtable.ajax.reload()
+						if (res.success) {
+							Swal.fire(
+								'Deleted!',
+								'',
+								'success'
+							)
+						} else if (res.map_view) {
+							Swal.fire({
+								title: 'Cannot delete this item',
+								html: res.map_view
+							});
+						} else {
+							var error_message = res.error_message;
+							if (!error_message) {
+								error_message = 'Refresh page or try again'
+							}
+							Swal.fire(
+								'Could not delete!',
+								error_message,
+								'error',
+							)
+						}
+					},
+					error: function (xhr, err, res) {
+						Swal.fire(
+							'Could not delete!',
+							'Refresh page or try again',
+							'error',
+						)
+					}
+				})
+			}
+		})
+	})
 });

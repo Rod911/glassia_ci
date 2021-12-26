@@ -29,20 +29,20 @@
 <script>
 	$(document).on('input', "#receipt-received_amt", function() {
 		var received = $(this).val();
-		var billAmt = $("#receipt-bill_amt").val();
-		var receivedValue = parseFloat(received);
-		if (!received || !receivedValue) {
-			$("#receipt-pending_amt").val('');
+		var pending = $(this).attr('max');
+		if (received == '') {
+			$("#receipt-pending_amt").val('')
 			return;
 		}
-		var billValue = parseFloat(billAmt);
-		var pendingValue = billValue - receivedValue;
-		if (pendingValue < 0) {
-			Swal.showValidationMessage(`Maximum receivable amount: Rs.${billValue}`)
+		var receivedValue = parseFloat(received);
+		var pendingValue = parseFloat(pending);
+		var balance = pendingValue - receivedValue;
+		if (receivedValue > pendingValue) {
+			Swal.showValidationMessage(`Maximum receivable amount: Rs.${pendingValue}`)
 		} else {
 			Swal.resetValidationMessage();
 		}
-		$("#receipt-pending_amt").val(pendingValue)
+		$("#receipt-pending_amt").val(balance)
 	});
 </script>
 
