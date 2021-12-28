@@ -7,4 +7,7 @@ CREATE TABLE `payment_receipts` (
 	`created_date` DATE NOT NULL,
 	PRIMARY KEY (`id`)
 );
--- 
+-- 2021-12-28 22:11:59
+ALTER TABLE `invoice_particulars`
+ADD `hsn` VARCHAR(100) NOT NULL
+AFTER `name`;

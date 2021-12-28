@@ -66,6 +66,7 @@
 			<thead>
 				<tr>
 					<th style="width: 50%;">Particulars</th>
+					<th>HSN/SAC</th>
 					<th>Qty</th>
 					<th>SFT</th>
 					<th>Rate</th>
@@ -80,6 +81,9 @@
 					<tr>
 						<td>
 							<textarea name="particulars_items[]" rows="1" class="form-control auto-grow" required><?= $particulars[$pi]['name'] ?? '' ?></textarea>
+						</td>
+						<td>
+							<input type="text" class="form-control" data-currency="" name="hsn[]" value="<?= $particulars[$pi]['hsn'] ?? '' ?>">
 						</td>
 						<td>
 							<input type="text" class="form-control numeric" data-currency="" name="particulars_qty[]" required value="<?= $particulars[$pi]['qty'] ?? '' ?>">

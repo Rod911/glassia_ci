@@ -114,58 +114,8 @@ function getIndianCurrency(float $number) {
 							</tr>
 						</tbody>
 					</table>
-					<!-- <div class="top">
-						<div class="top-label">
-							<?php
-							if ($invoice['invoice_type'] == 't') {
-							?>
-								<p>TAX INVOICE</p>
-							<?php
-							}
-							?>
-						</div>
-						<div class="top-head">
-							<img src="<?= as_base_url('admin/img/logo.png') ?>" alt="">
-						</div>
-						<div class="top-bill">
-							<?php
-							if ($invoice['invoice_type'] == 't') {
-							?>
-								<p class="bill-no dotted">BILL NO <span><strong><?= $invoice['bill_no'] ?></strong></span></p>
-							<?php
-							}
-							?>
-						</div>
-					</div> -->
 				</td>
 			</tr>
-			<!-- <tr>
-				<td colspan="3">
-					<div class="address">
-						<p>D. No. 3-2(1) Nandadeep Industries Compound, Maryhill, Mangaluru 575008</p>
-					</div>
-				</td>
-			</tr> -->
-			<!-- <tr>
-				<td colspan="3">
-					<div class="mid-1">
-						<div class="mid-gst">
-							<p>GSTIN: 29ACBPH6632C1ZX</p>
-						</div>
-						<div class="mid-datetime">
-							<p class="dotted">Date: <span><?= date('d-m-Y', strtotime($invoice['date'])) ?></span></p>
-							<p class="dotted">Time: <span><?= $invoice['time'] ?></span></p>
-						</div>
-					</div>
-					<div class="mid-2">
-						<div class="mid-row">
-							<p class="dotted mid-left">To: <span><?= $invoice['towards'] ?></span></p>
-							<p class="dotted mid-right">Buyer's TIN: <span><?= $invoice['buyer_tin'] ?></span></p>
-						</div>
-						<p class="dotted">Worksite: <span><?= $invoice['worksite'] ?></span></p>
-					</div>
-				</td>
-			</tr> -->
 		</thead>
 		<tbody>
 			<tr>
@@ -175,6 +125,7 @@ function getIndianCurrency(float $number) {
 							<tr>
 								<th>Sl. No</th>
 								<th class="particulars-col">Particulars</th>
+								<th>HSN/SAC</th>
 								<th>Qnty</th>
 								<th>SFT</th>
 								<th>Rate</th>
@@ -185,6 +136,7 @@ function getIndianCurrency(float $number) {
 							<?php
 							foreach ($particulars as $pi => $item) {
 								$particulars_item = $item['name'];
+								$hsn = $item['hsn'];
 								$qty = $item['qty'];
 								$price = $item['sft'];
 								$rate = $item['rate'];
@@ -193,6 +145,7 @@ function getIndianCurrency(float $number) {
 								<tr>
 									<td class="sl-cell"><?= $pi + 1 ?></td>
 									<td><?= $particulars_item ?></td>
+									<td><?= $hsn ?></td>
 									<td class="amt-cell"><?= number_format($qty, 0) ?></td>
 									<td class="amt-cell"><?= number_format($price, 2) ?></td>
 									<td class="amt-cell"><?= number_format($rate, 2) ?></td>
@@ -208,12 +161,14 @@ function getIndianCurrency(float $number) {
 								<td></td>
 								<td></td>
 								<td></td>
+								<td></td>
 							</tr>
 						</tbody>
 						<tfoot>
 							<tr>
 								<td></td>
 								<td class="amt-cell">Sub Total</td>
+								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -227,12 +182,14 @@ function getIndianCurrency(float $number) {
 									<td class="amt-cell">CGST</td>
 									<td></td>
 									<td></td>
+									<td></td>
 									<td class="amt-cell">9%</td>
 									<td class="amt-cell"><?= number_format($invoice['csgst'], 2) ?></td>
 								</tr>
 								<tr>
 									<td></td>
 									<td class="amt-cell">SGST</td>
+									<td></td>
 									<td></td>
 									<td></td>
 									<td class="amt-cell">9%</td>
@@ -246,6 +203,7 @@ function getIndianCurrency(float $number) {
 									<td class="amt-cell">IGST</td>
 									<td></td>
 									<td></td>
+									<td></td>
 									<td class="amt-cell">18%</td>
 									<td class="amt-cell"><?= number_format($invoice['igst'], 2) ?></td>
 								</tr>
@@ -253,7 +211,7 @@ function getIndianCurrency(float $number) {
 							}
 							?>
 							<tr>
-								<td colspan="3">
+								<td colspan="4">
 									<p class="dotted">Rs. <span><?= getIndianCurrency(round($invoice['invoice_total'], 2)) ?></span></p>
 								</td>
 								<td colspan="2" class="amt-cell">

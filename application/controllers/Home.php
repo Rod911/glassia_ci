@@ -45,6 +45,7 @@ class Home extends CI_Controller {
 		$post['sub_total'] = 0;
 		$post['created_date'] = date('Y-m-d H:i:s');
 
+		$data['hsn'] = $this->input->post('hsn');
 		$data['particulars_items'] = $this->input->post('particulars_items');
 		$data['particulars_qty'] = $this->input->post('particulars_qty');
 		$data['particulars_price'] = $this->input->post('particulars_price');
@@ -53,6 +54,7 @@ class Home extends CI_Controller {
 		$post_p = [];
 		foreach ($data['particulars_items'] as $di => $particular) {
 			$name = $data['particulars_items'][$di];
+			$hsn = $data['hsn'][$di];
 			$qty = $data['particulars_qty'][$di];
 			$price = $data['particulars_price'][$di];
 			$rate = $data['particulars_rate'][$di];
@@ -62,6 +64,7 @@ class Home extends CI_Controller {
 			$particular_item = [
 				'bill_no' => $post['bill_no'],
 				'name' => $name,
+				'hsn' => $hsn,
 				'qty' => $qty,
 				'sft' => $price,
 				'rate' => $rate,
