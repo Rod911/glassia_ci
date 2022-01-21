@@ -25,6 +25,7 @@ class Home extends CI_Controller {
 		$this->load->view('form', $data);
 	}
 
+
 	public function bill() {
 		$post['bill_no'] = $this->input->post('bill_no');
 		$post['invoice_type'] = $this->input->post('invoice_type');
@@ -132,5 +133,38 @@ class Home extends CI_Controller {
 
 		$this->db->insert('payment_receipts', $post_receipt);
 		redirect(base_url('home/receipts?towards=' . $data['towards']));
+	}
+
+	public function statement() {
+		$toward_options = $this->db
+			->select('TRIM(towards) as towards')
+			->group_by('towards')
+			->order_by('towards', 'ASC')
+			->from('tax_invoices')
+			->get()
+			->result_array();
+		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
+		$data['toward_options'] = [' ' => 'All'] + $data['toward_options'];
+		$this->load->view('statement', $data);
+	}
+
+	public function get_statement() {
+		$customer = $this->input->get('customer');
+		$from_date = $this->input->get('from_date');
+		$to_date = $this->input->get('to_date');
+		if ($from_date != '') {
+			$this->db->where('date >=', date('Y-m-d', strtotime($from_date)));
+		}
+		if ($to_date != '') {
+			$this->db->where('date <=', date('Y-m-d', strtotime($to_date)));
+		}
+		if ($customer != ' ') {
+			$this->db->where('towards', $customer);
+		}
+		$data['statements'] = $this->db
+			->order_by('bill_no')
+			->get('tax_invoices')
+			->result_array();
+		$this->load->view('statement_view', $data);
 	}
 }

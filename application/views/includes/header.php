@@ -18,7 +18,7 @@
 
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
 
 	<script src="<?= as_base_url('plugins/jquery-3.6.0.min.js') ?>"></script>
 	<script>
@@ -50,6 +50,9 @@
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" aria-current="page" href="<?= base_url('home/receipts') ?>"><i class="bi bi-cash bi-lg"></i> Receipts</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" aria-current="page" href="<?= base_url('home/statement') ?>"><i class="bi bi-printer bi-lg"></i> Statement</a>
 						</li>
 					</ul>
 				</div>
