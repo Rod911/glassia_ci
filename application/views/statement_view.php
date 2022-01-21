@@ -27,6 +27,11 @@
 				max-width: none;
 			}
 		}
+
+		/* Hosting overlay */
+		.print-action+div {
+			visibility: hidden;
+		}
 	</style>
 
 </head>
@@ -66,6 +71,7 @@
 			<button class="btn btn-primary" onclick="window.print()">Print</button>
 		</div>
 	</div>
+	<div class="print-action"></div>
 </body>
 
 </html>
