@@ -53,17 +53,25 @@
 			</thead>
 			<tbody>
 				<?php
+				$total = 0;
 				foreach ($statements as $si => $stm) {
+					$total += $stm['invoice_total'];
 				?>
 					<tr>
 						<td class="px-2"><?= $stm['bill_no'] ?></td>
 						<td class="px-2"><?= $stm['towards'] ?></td>
-						<td class="px-2 text-end font-monospace"><?= $stm['invoice_total'] ?></td>
+						<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
 						<td class="px-2 text-end"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
 					</tr>
 				<?php
 				}
 				?>
+				<tr>
+					<td></td>
+					<td class="px-2"><b>Total</b></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($total, 2) ?></b></td>
+					<td></td>
+				</tr>
 			</tbody>
 		</table>
 		<div class="text-center d-print-none py-3">
