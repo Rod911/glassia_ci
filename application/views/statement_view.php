@@ -32,6 +32,10 @@
 		.print-action+div {
 			visibility: hidden;
 		}
+
+		.disclaimer {
+			display: none;
+		}
 	</style>
 
 </head>

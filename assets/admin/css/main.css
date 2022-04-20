@@ -70,3 +70,7 @@ body {
 .swal-wide {
 	width: 40rem;
 }
+
+.disclaimer {
+	display: none;
+}

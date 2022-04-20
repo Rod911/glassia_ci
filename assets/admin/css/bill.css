@@ -338,6 +338,10 @@ td.particulars-cell {
 	visibility: hidden;
 }
 
+.disclaimer {
+	display: none;
+}
+
 @media print {
 	.print-action {
 		display: none;
