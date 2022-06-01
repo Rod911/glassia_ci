@@ -18,6 +18,24 @@ class Ajax extends CI_Controller {
 		echo json_encode($view);
 	}
 
+	public function add_payment() {
+		$v = $this->input->post('value');
+		$toward_options = $this->db
+			->select('TRIM(towards) as towards')
+			->group_by('towards')
+			->order_by('towards', 'ASC')
+			->from('tax_invoices')
+			->get()
+			->result_array();
+		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
+		$view = [
+			'title' => 'Add Payment',
+			'content' => $this->load->view('ajax/add_payment', $data, true),
+			'data' => $data,
+		];
+		echo json_encode($view);
+	}
+
 	public function delete_record() {
 		$data = explode(',', $this->input->post('id'));
 		$row = $data[0];
@@ -33,7 +51,8 @@ class Ajax extends CI_Controller {
 
 	public function get_customer_totals() {
 		$towards = $this->input->get('towards');
-		$where = ['towards' => $towards];
+		// $where = ['towards' => $towards];
+		$where = [];
 		if ($this->input->get('from') != '') {
 			$where['t.date >='] = date('Y-m-d', strtotime($this->input->get('from')));
 		}
@@ -43,10 +62,11 @@ class Ajax extends CI_Controller {
 
 		$bill_total = $this->db
 			->select_sum('invoice_total', 'invoice_total_amount')
+			->where('towards', $towards)
 			->where($where)
 			->get('tax_invoices t')
 			->row_array()['invoice_total_amount'] ?? 0;
-		$received_total = $this->db
+		$payment_receipts = $this->db
 			->select_sum('received_amt', 'received_total_amount')
 			->where('towards', $towards)
 			->where($where)
@@ -54,8 +74,18 @@ class Ajax extends CI_Controller {
 			->join('tax_invoices t', 'r.bill_no = t.bill_no', 'LEFT')
 			->get()
 			->row_array()['received_total_amount'] ?? 0;
+		$customer_receipts = $this->db
+			->select_sum('amount', 'received_total_amount')
+			->where('customer', $towards)
+			->from('customer_receipts')
+			->get()
+			->row_array()['received_total_amount'] ?? 0;
+
+		$received_total = $payment_receipts + $customer_receipts;
+
 		echo json_encode([
 			'total' => number_format($bill_total, 2),
+			'customer_receipts' => number_format($customer_receipts, 2),
 			'received' => number_format($received_total, 2),
 			'pending' => number_format($bill_total - $received_total, 2),
 		]);

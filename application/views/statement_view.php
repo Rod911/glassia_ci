@@ -36,6 +36,10 @@
 		.disclaimer {
 			display: none;
 		}
+
+		caption {
+			caption-side: top;
+		}
 	</style>
 
 </head>
@@ -47,9 +51,40 @@
 			<button class="btn btn-primary" onclick="window.print()">Print</button>
 		</div>
 		<table class="table table-bordered table-sm">
+			<caption>Invoices</caption>
 			<thead>
 				<tr>
 					<th class="px-2">Bill No</th>
+					<th class="px-2">Customer</th>
+					<th class="px-2 text-end">Amount</th>
+					<th class="px-2 text-end">Paid</th>
+					<th class="px-2 text-end">Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$paid = 0;
+				$total = 0;
+				foreach ($statements as $si => $stm) {
+					$total += $stm['invoice_total'];
+					$paid += $stm['received_amt'];
+				?>
+					<tr>
+						<td class="px-2"><?= $stm['bill_no'] ?></td>
+						<td class="px-2"><?= $stm['towards'] ?></td>
+						<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
+						<td class="px-2 text-end font-monospace"><?= number_format($stm['received_amt'], 2) ?></td>
+						<td class="px-2 text-end"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
+					</tr>
+				<?php
+				}
+				?>
+			</tbody>
+		</table>
+		<table class="table table-bordered table-sm">
+			<caption>Payments</caption>
+			<thead>
+				<tr>
 					<th class="px-2">Customer</th>
 					<th class="px-2 text-end">Amount</th>
 					<th class="px-2 text-end">Date</th>
@@ -57,24 +92,32 @@
 			</thead>
 			<tbody>
 				<?php
-				$total = 0;
-				foreach ($statements as $si => $stm) {
-					$total += $stm['invoice_total'];
+				foreach ($customer_receipts as $si => $stm) {
+					$paid += $stm['amount'];
 				?>
 					<tr>
-						<td class="px-2"><?= $stm['bill_no'] ?></td>
-						<td class="px-2"><?= $stm['towards'] ?></td>
-						<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
-						<td class="px-2 text-end"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
+						<td class="px-2"><?= $stm['customer'] ?></td>
+						<td class="px-2 text-end font-monospace"><?= number_format($stm['amount'], 2) ?></td>
+						<td class="px-2 text-end"><?= date('d-m-Y', strtotime($stm['payment_date'])) ?></td>
 					</tr>
 				<?php
 				}
 				?>
+			</tbody>
+		</table>
+		<table class="table table-bordered table-sm">
+			<thead>
 				<tr>
-					<td></td>
-					<td class="px-2"><b>Total</b></td>
+					<th class="px-2 text-end">Invoice Total</th>
+					<th class="px-2 text-end">Payment Total</th>
+					<th class="px-2 text-end">Balance</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
 					<td class="px-2 text-end font-monospace"><b><?= number_format($total, 2) ?></b></td>
-					<td></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($paid, 2) ?></b></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($total - $paid, 2) ?></b></td>
 				</tr>
 			</tbody>
 		</table>

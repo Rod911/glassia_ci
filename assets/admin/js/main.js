@@ -106,6 +106,10 @@ $(function () {
 				Swal.hideLoading();
 				$("#swal2-title").text(res.title);
 				$("#swal2-html-container").html(res.content);
+				$('#swal2-html-container .select-widget').select2({
+					...select2Config,
+					dropdownParent: $('#swal2-html-container'),
+				});
 			}
 		});
 	});

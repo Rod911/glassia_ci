@@ -1,9 +1,9 @@
 <?= $this->load->view('includes/header', [], true); ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-	<h1 class="display-6">Receipts</h1>
+	<h1 class="display-6">Payments</h1>
 	<div class="btn-toolbar mb-2 mb-md-0">
 		<div class="btn-group me-2">
-			<!-- <button class="btn btn-outline-primary" id="" data-popup-view="add_receipt" data-no-btn="1" data-modal-size="swal-wide" data-id=""><i class="bi bi-cash"></i> Add</button> -->
+			<button class="btn btn-outline-primary" id="" data-popup-view="add_payment" data-no-btn="1" data-modal-size="swal-wide" data-id=""><i class="bi bi-cash"></i> Add</button>
 		</div>
 	</div>
 </div>
@@ -12,9 +12,9 @@
 		<div class="col-md-5">
 			<div class="select2-input mb-2">
 				<?= form_dropdown(
-					['class' => 'form-control select-widget', 'id' => 'select-towards'],
+					['class' => 'form-control select-widget', 'id' => 'select-customer'],
 					$toward_options,
-					$this->input->get('towards'),
+					$this->input->get('customer'),
 				) ?>
 			</div>
 			<label class="mb-1">From date | To date</label>
@@ -42,17 +42,12 @@
 	</div>
 </div>
 <div class="table-responsive py-1">
-	<table class="table table-striped" id="d-table" data-ajax-url="<?= base_url('ajaxtables/receipts') ?>">
+	<table class="table table-striped" id="d-table" data-ajax-url="<?= base_url('ajaxtables/payments') ?>">
 		<thead>
 			<tr>
-				<th scope="col">Bill No</th>
-				<th scope="col">Total Amount</th>
-				<th scope="col">Date</th>
-				<th scope="col">Received Date</th>
+				<th scope="col">Customer</th>
 				<th scope="col">Received Amount</th>
-				<th scope="col">Pending Amount</th>
-				<th scope="col">Receipt</th>
-				<th scope="col">Bill</th>
+				<th scope="col">Received Date</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -62,25 +57,15 @@
 
 <script>
 	function getFilter() {
-		var towards = $("#select-towards").val();
+		var customer = $("#select-customer").val();
 		var from = $("#input-from").val();
 		var to = $("#input-to").val();
 		return {
-			towards: towards,
+			towards: customer,
 			from: from,
 			to: to,
 		};
 	}
-
-	let queryParams = new URLSearchParams(window.location.search);
-	$("#select-towards, .date-widget").on('change', function() {
-		dtable.ajax.reload();
-		queryParams.set('towards', $("#select-towards").val());
-		queryParams.set('from', $("#input-from").val());
-		queryParams.set('to', $("#input-to").val());
-		history.replaceState(null, null, "?" + queryParams.toString());
-		updateTotals();
-	});
 
 	function updateTotals() {
 		var towards = $("#select-towards").val();
@@ -97,21 +82,14 @@
 
 	updateTotals();
 
-	$(document).on('input', "#receipt-received_amt", function() {
-		var received = $(this).val();
-		var pending = $(this).attr('max');
-		if (received == '') {
-			received = 0;
-		}
-		var receivedValue = parseFloat(received);
-		var pendingValue = parseFloat(pending);
-		var balance = pendingValue - receivedValue;
-		if (receivedValue > pendingValue) {
-			Swal.showValidationMessage(`Maximum receivable amount: Rs.${pendingValue}`)
-		} else {
-			Swal.resetValidationMessage();
-		}
-		$("#receipt-pending_amt").val(balance)
+	let queryParams = new URLSearchParams(window.location.search);
+	$("#select-customer, .date-widget").on('change', function() {
+		dtable.ajax.reload();
+		queryParams.set('customer', $("#select-customer").val());
+		queryParams.set('from', $("#input-from").val());
+		queryParams.set('to', $("#input-to").val());
+		history.replaceState(null, null, "?" + queryParams.toString());
+		updateTotals();
 	});
 </script>
 

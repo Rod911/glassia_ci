@@ -54,6 +54,9 @@
 						<li class="nav-item">
 							<a class="nav-link" aria-current="page" href="<?= base_url('home/statement') ?>"><i class="bi bi-printer bi-lg"></i> Statement</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link" aria-current="page" href="<?= base_url('home/payments') ?>"><i class="bi bi-arrow-down-square bi-lg"></i> Payments</a>
+						</li>
 					</ul>
 				</div>
 			</nav>

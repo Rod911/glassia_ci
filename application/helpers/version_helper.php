@@ -5,7 +5,7 @@ function css_version() {
       return 1.0002;
 }
 function js_version() {
-      return 1.0001;
+      return 1.0002;
 }
 function img_version() {
       return 1.0000;

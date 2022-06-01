@@ -11,3 +11,16 @@ CREATE TABLE `payment_receipts` (
 ALTER TABLE `invoice_particulars`
 ADD `hsn` VARCHAR(100) NOT NULL
 AFTER `name`;
+-- 2022-06-01 20:34:04
+CREATE TABLE `customer_receipts` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`customer` VARCHAR(250) NOT NULL,
+	`amount` FLOAT(10, 2) NOT NULL,
+	`receipt_date` DATETIME NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+-- 
+ALTER TABLE `customer_receipts`
+ADD `payment_date` DATE NOT NULL
+AFTER `receipt_date`;
+--

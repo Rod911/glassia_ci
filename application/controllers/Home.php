@@ -162,9 +162,55 @@ class Home extends CI_Controller {
 			$this->db->where('towards', $customer);
 		}
 		$data['statements'] = $this->db
-			->order_by('bill_no')
-			->get('tax_invoices')
+			->select('t.*')
+			->select_sum('r.received_amt', 'received_amt')
+			->order_by('t.bill_no')
+			->from('tax_invoices t')
+			->join('payment_receipts r', 'r.bill_no = t.bill_no', 'LEFT')
+			->group_by('t.bill_no')
+			->get()
+			->result_array();
+		if ($from_date != '') {
+			$this->db->where('date >=', date('Y-m-d', strtotime($from_date)));
+		}
+		if ($to_date != '') {
+			$this->db->where('date <=', date('Y-m-d', strtotime($to_date)));
+		}
+		if ($customer != ' ') {
+			$this->db->where('customer', $customer);
+		}
+		$data['customer_receipts'] = $this->db
+			->order_by('payment_date')
+			->get('customer_receipts')
 			->result_array();
 		$this->load->view('statement_view', $data);
+	}
+
+	public function payments() {
+		$toward_options = $this->db
+			->select('TRIM(towards) as towards')
+			->group_by('towards')
+			->order_by('towards', 'ASC')
+			->from('tax_invoices')
+			->get()
+			->result_array();
+		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
+		$this->load->view('payments', $data);
+	}
+
+	public function submit_payment() {
+		$date = $this->input->post('date');
+		$customer = $this->input->post('customer');
+		$received_amt = $this->input->post('received_amt');
+
+		$post_receipt = [
+			'customer' => $customer,
+			'payment_date' => date('Y-m-d', strtotime($date)),
+			'amount' => $received_amt,
+			'receipt_date' => date('Y-m-d H:i:s'),
+		];
+
+		$this->db->insert('customer_receipts', $post_receipt);
+		redirect(base_url('home/payments'));
 	}
 }
