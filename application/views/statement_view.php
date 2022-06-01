@@ -54,7 +54,7 @@
 			<caption>Invoices</caption>
 			<thead>
 				<tr>
-					<th class="px-2">Bill No</th>
+					<th class="px-2 text-nowrap">Bill No</th>
 					<th class="px-2">Customer</th>
 					<th class="px-2 text-end">Amount</th>
 					<th class="px-2 text-end">Paid</th>
@@ -74,7 +74,7 @@
 						<td class="px-2"><?= $stm['towards'] ?></td>
 						<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
 						<td class="px-2 text-end font-monospace"><?= number_format($stm['received_amt'], 2) ?></td>
-						<td class="px-2 text-end"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
+						<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
 					</tr>
 				<?php
 				}
@@ -98,7 +98,7 @@
 					<tr>
 						<td class="px-2"><?= $stm['customer'] ?></td>
 						<td class="px-2 text-end font-monospace"><?= number_format($stm['amount'], 2) ?></td>
-						<td class="px-2 text-end"><?= date('d-m-Y', strtotime($stm['payment_date'])) ?></td>
+						<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['payment_date'])) ?></td>
 					</tr>
 				<?php
 				}
