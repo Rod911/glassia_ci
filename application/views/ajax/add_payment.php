@@ -1,11 +1,16 @@
+<style>
+	.swal2-html-container .select2-container {
+		text-align: left;
+	}
+</style>
 <form class="text-start fs-6" action="<?= base_url('home/submit_payment') ?>" method="POST">
 	<div class="form-group row mb-3">
 		<div class="col-md-4"><label for="receipt-towards" class="control-label">Towards</label></div>
-		<div class="col-md-8"><?= form_dropdown('customer', $toward_options, [], ['class' => "form-control select-widget text-left", 'id' => "receipt-towards"]) ?></div>
+		<div class="col-md-8"><?= form_dropdown('customer', $toward_options, [], ['class' => "form-control select-widget text-left", 'id' => "receipt-towards", 'required' => true]) ?></div>
 	</div>
 	<div class="form-group row mb-3">
 		<div class="col-md-4"><label for="receipt-date" class="control-label">Received Date</label></div>
-		<div class="col-md-8"><input type="date" class="form-control" id="receipt-date" name=date value="<?= date('Y-m-d') ?>"></div>
+		<div class="col-md-8"><input type="date" class="form-control" id="receipt-date" name=date value="<?= date('Y-m-d') ?>" required></div>
 	</div>
 	<div class="form-group row mb-3">
 		<div class="col-md-4"><label for="receipt-received_amt" class="control-label">Received Amount</label></div>

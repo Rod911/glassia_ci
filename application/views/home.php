@@ -16,7 +16,7 @@
 				<th scope="col">Towards</th>
 				<th scope="col">Total Amount</th>
 				<th scope="col">Date</th>
-				<th scope="col">Receipt</th>
+				<!-- <th scope="col">Receipt</th> -->
 				<th scope="col">Edit</th>
 				<th scope="col">Bill</th>
 			</tr>

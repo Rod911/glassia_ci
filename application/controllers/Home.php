@@ -179,6 +179,7 @@ class Home extends CI_Controller {
 		if ($customer != ' ') {
 			$this->db->where('customer', $customer);
 		}
+		$data['customer'] = $customer;
 		$data['customer_receipts'] = $this->db
 			->order_by('payment_date')
 			->get('customer_receipts')
@@ -194,7 +195,7 @@ class Home extends CI_Controller {
 			->from('tax_invoices')
 			->get()
 			->result_array();
-		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
+		$data['toward_options'] = ['' => "Select Customer"] + array_column($toward_options, 'towards', 'towards');
 		$this->load->view('payments', $data);
 	}
 

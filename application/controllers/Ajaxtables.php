@@ -38,11 +38,11 @@ class Ajaxtables extends CI_Controller {
 		$this->db->order_by('bill_no', 'DESC');
 		$this->datatables
 			->select('bill_no, towards, invoice_total, date')
-			->add_column(
-				'receipt',
-				'<button class="btn btn-info btn-sm" data-popup-view="add_receipt" data-no-btn=1 data-modal-size="swal-wide" data-id=$1><i class="bi bi-cash"></i> Receipt</button>',
-				'bill_no'
-			)
+			// ->add_column(
+			// 	'receipt',
+			// 	'<button class="btn btn-info btn-sm" data-popup-view="add_receipt" data-no-btn=1 data-modal-size="swal-wide" data-id=$1><i class="bi bi-cash"></i> Receipt</button>',
+			// 	'bill_no'
+			// )
 			->add_column(
 				'edit',
 				'<a href="' . base_url('home/form?edit=$1') . '" class="btn btn-primary btn-sm"><i class="bi bi-receipt-cutoff"></i> Edit</a>',

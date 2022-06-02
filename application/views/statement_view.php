@@ -51,13 +51,26 @@
 			<button class="btn btn-primary" onclick="window.print()">Print</button>
 		</div>
 		<table class="table table-bordered table-sm">
+			<?php
+			if ($customer != '') {
+			?>
+				<h4><?= $customer ?></h4>
+			<?php
+			}
+			?>
 			<caption>Invoices</caption>
 			<thead>
 				<tr>
 					<th class="px-2 text-nowrap">Bill No</th>
-					<th class="px-2">Customer</th>
+					<?php
+					if ($customer == '') {
+					?>
+						<th class="px-2">Customer</th>
+					<?php
+					}
+					?>
 					<th class="px-2 text-end">Amount</th>
-					<th class="px-2 text-end">Paid</th>
+					<!-- <th class="px-2 text-end">Paid</th> -->
 					<th class="px-2 text-end">Date</th>
 				</tr>
 			</thead>
@@ -67,13 +80,19 @@
 				$total = 0;
 				foreach ($statements as $si => $stm) {
 					$total += $stm['invoice_total'];
-					$paid += $stm['received_amt'];
+					// $paid += $stm['received_amt'];
 				?>
 					<tr>
 						<td class="px-2"><?= $stm['bill_no'] ?></td>
-						<td class="px-2"><?= $stm['towards'] ?></td>
+						<?php
+						if ($customer == '') {
+						?>
+							<td class="px-2"><?= $stm['towards'] ?></td>
+						<?php
+						}
+						?>
 						<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
-						<td class="px-2 text-end font-monospace"><?= number_format($stm['received_amt'], 2) ?></td>
+						<!-- <td class="px-2 text-end font-monospace"><?= number_format($stm['received_amt'], 2) ?></td> -->
 						<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
 					</tr>
 				<?php
@@ -85,7 +104,13 @@
 			<caption>Payments</caption>
 			<thead>
 				<tr>
-					<th class="px-2">Customer</th>
+					<?php
+					if ($customer == '') {
+					?>
+						<th class="px-2">Customer</th>
+					<?php
+					}
+					?>
 					<th class="px-2 text-end">Amount</th>
 					<th class="px-2 text-end">Date</th>
 				</tr>
@@ -96,7 +121,13 @@
 					$paid += $stm['amount'];
 				?>
 					<tr>
-						<td class="px-2"><?= $stm['customer'] ?></td>
+						<?php
+						if ($customer == '') {
+						?>
+							<td class="px-2"><?= $stm['customer'] ?></td>
+						<?php
+						}
+						?>
 						<td class="px-2 text-end font-monospace"><?= number_format($stm['amount'], 2) ?></td>
 						<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['payment_date'])) ?></td>
 					</tr>

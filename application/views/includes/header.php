@@ -48,9 +48,9 @@
 						<li class="nav-item">
 							<a class="nav-link" aria-current="page" href="<?= base_url() ?>"><i class="bi bi-receipt-cutoff bi-lg"></i> Invoices</a>
 						</li>
-						<li class="nav-item">
+						<!-- <li class="nav-item">
 							<a class="nav-link" aria-current="page" href="<?= base_url('home/receipts') ?>"><i class="bi bi-cash bi-lg"></i> Receipts</a>
-						</li>
+						</li> -->
 						<li class="nav-item">
 							<a class="nav-link" aria-current="page" href="<?= base_url('home/statement') ?>"><i class="bi bi-printer bi-lg"></i> Statement</a>
 						</li>

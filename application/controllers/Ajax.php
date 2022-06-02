@@ -27,7 +27,7 @@ class Ajax extends CI_Controller {
 			->from('tax_invoices')
 			->get()
 			->result_array();
-		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
+		$data['toward_options'] = ['' => "Select"] + array_column($toward_options, 'towards', 'towards');
 		$view = [
 			'title' => 'Add Payment',
 			'content' => $this->load->view('ajax/add_payment', $data, true),
@@ -66,14 +66,14 @@ class Ajax extends CI_Controller {
 			->where($where)
 			->get('tax_invoices t')
 			->row_array()['invoice_total_amount'] ?? 0;
-		$payment_receipts = $this->db
-			->select_sum('received_amt', 'received_total_amount')
-			->where('towards', $towards)
-			->where($where)
-			->from('payment_receipts r')
-			->join('tax_invoices t', 'r.bill_no = t.bill_no', 'LEFT')
-			->get()
-			->row_array()['received_total_amount'] ?? 0;
+		// $payment_receipts = $this->db
+		// 	->select_sum('received_amt', 'received_total_amount')
+		// 	->where('towards', $towards)
+		// 	->where($where)
+		// 	->from('payment_receipts r')
+		// 	->join('tax_invoices t', 'r.bill_no = t.bill_no', 'LEFT')
+		// 	->get()
+		// 	->row_array()['received_total_amount'] ?? 0;
 		$customer_receipts = $this->db
 			->select_sum('amount', 'received_total_amount')
 			->where('customer', $towards)
@@ -81,13 +81,13 @@ class Ajax extends CI_Controller {
 			->get()
 			->row_array()['received_total_amount'] ?? 0;
 
-		$received_total = $payment_receipts + $customer_receipts;
+		// $received_total = $payment_receipts + $customer_receipts;
 
 		echo json_encode([
 			'total' => number_format($bill_total, 2),
-			'customer_receipts' => number_format($customer_receipts, 2),
-			'received' => number_format($received_total, 2),
-			'pending' => number_format($bill_total - $received_total, 2),
+			// 'customer_receipts' => number_format($customer_receipts, 2),
+			'received' => number_format($customer_receipts, 2),
+			'pending' => number_format($bill_total - $customer_receipts, 2),
 		]);
 	}
 
