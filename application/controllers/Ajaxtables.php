@@ -89,7 +89,9 @@ class Ajaxtables extends CI_Controller {
 
 	public function payments() {
 		$this->db->order_by('receipt_date', 'DESC');
-		$this->datatables->where('TRIM(customer)', $this->input->post('filter')['towards']);
+		if ($this->input->post('filter')['towards'] != '') {
+			$this->datatables->where('TRIM(customer)', $this->input->post('filter')['towards']);
+		}
 		if ($this->input->post('filter')['from'] != '') {
 			$this->datatables->filter('t.date >=', date('Y-m-d', strtotime($this->input->post('filter')['from'])));
 		}
