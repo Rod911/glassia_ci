@@ -144,7 +144,7 @@ class Home extends CI_Controller {
 			->get()
 			->result_array();
 		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
-		$data['toward_options'] = [' ' => 'All'] + $data['toward_options'];
+		$data['toward_options'] = ['' => 'All'] + $data['toward_options'];
 		$this->load->view('statement', $data);
 	}
 
@@ -158,7 +158,7 @@ class Home extends CI_Controller {
 		if ($to_date != '') {
 			$this->db->where('t.date <=', date('Y-m-d', strtotime($to_date)));
 		}
-		if ($customer != ' ') {
+		if ($customer != '') {
 			$this->db->where('towards', $customer);
 		}
 		$data['statements'] = $this->db
