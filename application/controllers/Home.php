@@ -176,7 +176,7 @@ class Home extends CI_Controller {
 		if ($to_date != '') {
 			$this->db->where('receipt_date <=', date('Y-m-d', strtotime($to_date)));
 		}
-		if ($customer != ' ') {
+		if ($customer != '') {
 			$this->db->where('customer', $customer);
 		}
 		$data['customer'] = $customer;
