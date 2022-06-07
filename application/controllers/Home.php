@@ -153,10 +153,10 @@ class Home extends CI_Controller {
 		$from_date = $this->input->get('from_date');
 		$to_date = $this->input->get('to_date');
 		if ($from_date != '') {
-			$this->db->where('date >=', date('Y-m-d', strtotime($from_date)));
+			$this->db->where('t.date >=', date('Y-m-d', strtotime($from_date)));
 		}
 		if ($to_date != '') {
-			$this->db->where('date <=', date('Y-m-d', strtotime($to_date)));
+			$this->db->where('t.date <=', date('Y-m-d', strtotime($to_date)));
 		}
 		if ($customer != ' ') {
 			$this->db->where('towards', $customer);
@@ -171,10 +171,10 @@ class Home extends CI_Controller {
 			->get()
 			->result_array();
 		if ($from_date != '') {
-			$this->db->where('t.date >=', date('Y-m-d', strtotime($from_date)));
+			$this->db->where('date >=', date('Y-m-d', strtotime($from_date)));
 		}
 		if ($to_date != '') {
-			$this->db->where('t.date <=', date('Y-m-d', strtotime($to_date)));
+			$this->db->where('date <=', date('Y-m-d', strtotime($to_date)));
 		}
 		if ($customer != ' ') {
 			$this->db->where('customer', $customer);
