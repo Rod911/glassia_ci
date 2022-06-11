@@ -145,6 +145,18 @@ class Home extends CI_Controller {
 			->result_array();
 		$data['toward_options'] = array_column($toward_options, 'towards', 'towards');
 		$data['toward_options'] = ['' => 'All'] + $data['toward_options'];
+
+		$data['date_options'] = [];
+		$dateTime = new DateTime('first day of this month');
+		for ($i = 1; $i <= 6; $i++) {
+			$data['date_options'][] = [
+				'label' => $dateTime->format('F, Y'),
+				'date_from' => $dateTime->format('Y-m-d'),
+				'date_to' => $dateTime->format('Y-m-t'),
+			];
+			$dateTime->modify('-1 month');
+		}
+
 		$this->load->view('statement', $data);
 	}
 
@@ -152,29 +164,36 @@ class Home extends CI_Controller {
 		$customer = $this->input->get('customer');
 		$from_date = $this->input->get('from_date');
 		$to_date = $this->input->get('to_date');
+		$data['has_opening_balance'] = false;
+		$data['has_closing_balance'] = false;
 		if ($from_date != '') {
 			$this->db->where('t.date >=', date('Y-m-d', strtotime($from_date)));
+			$data['has_opening_balance'] = true;
+			$data['opening_balance_date'] = date('jS M, Y', strtotime('-1 day', strtotime($from_date)));
+			$data['from_date'] = date('jS M, Y', strtotime($from_date));
 		}
 		if ($to_date != '') {
 			$this->db->where('t.date <=', date('Y-m-d', strtotime($to_date)));
+			$data['has_closing_balance'] = true;
+			$data['to_date'] = date('jS M, Y', strtotime($to_date));
 		}
 		if ($customer != '') {
 			$this->db->where('towards', $customer);
 		}
 		$data['statements'] = $this->db
-			->select('t.*')
-			->select_sum('r.received_amt', 'received_amt')
+			// ->select('t.*')
+			// ->select_sum('r.received_amt', 'received_amt')
 			->order_by('t.bill_no')
 			->from('tax_invoices t')
-			->join('payment_receipts r', 'r.bill_no = t.bill_no', 'LEFT')
-			->group_by('t.bill_no')
+			// ->join('payment_receipts r', 'r.bill_no = t.bill_no', 'LEFT')
+			// ->group_by('t.bill_no')
 			->get()
 			->result_array();
 		if ($from_date != '') {
-			$this->db->where('receipt_date >=', date('Y-m-d', strtotime($from_date)));
+			$this->db->where('payment_date >=', date('Y-m-d', strtotime($from_date)));
 		}
 		if ($to_date != '') {
-			$this->db->where('receipt_date <=', date('Y-m-d', strtotime($to_date)));
+			$this->db->where('payment_date <=', date('Y-m-d', strtotime($to_date)));
 		}
 		if ($customer != '') {
 			$this->db->where('customer', $customer);
@@ -184,6 +203,28 @@ class Home extends CI_Controller {
 			->order_by('payment_date')
 			->get('customer_receipts')
 			->result_array();
+
+		if ($from_date != '') {
+			$this->db->where('date <', date('Y-m-d', strtotime($from_date)));
+		}
+		if ($customer != '') {
+			$this->db->where('towards', $customer);
+		}
+		$data['opening_balance_invoices'] = $this->db
+			->select_sum('invoice_total')
+			->get('tax_invoices')
+			->row_array()['invoice_total'];
+		if ($from_date != '') {
+			$this->db->where('payment_date <', date('Y-m-d', strtotime($from_date)));
+		}
+		if ($customer != '') {
+			$this->db->where('customer', $customer);
+		}
+		$data['opening_balance_payments'] = $this->db
+			->select_sum('amount')
+			->get('customer_receipts')
+			->row_array()['amount'];
+
 		$this->load->view('statement_view', $data);
 	}
 
@@ -203,15 +244,21 @@ class Home extends CI_Controller {
 		$date = $this->input->post('date');
 		$customer = $this->input->post('customer');
 		$received_amt = $this->input->post('received_amt');
+		$id = $this->input->post('payment_id');
 
 		$post_receipt = [
 			'customer' => $customer,
 			'payment_date' => date('Y-m-d', strtotime($date)),
 			'amount' => $received_amt,
-			'receipt_date' => date('Y-m-d H:i:s'),
 		];
 
-		$this->db->insert('customer_receipts', $post_receipt);
+		if ($id == "") {
+			$post_receipt['receipt_date'] = date('Y-m-d H:i:s');
+			$this->db->insert('customer_receipts', $post_receipt);
+		} else {
+			$this->db->update('customer_receipts', $post_receipt, ['id' => $id], 1);
+		}
+
 		redirect(base_url('home/payments'));
 	}
 }

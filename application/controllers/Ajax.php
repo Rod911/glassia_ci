@@ -27,6 +27,12 @@ class Ajax extends CI_Controller {
 			->from('tax_invoices')
 			->get()
 			->result_array();
+		$data['payment'] = $this->db->get_where('customer_receipts', ['id' => $v], 1)->row_array();
+		if (!$data['payment']) {
+			$data['payment']['amount'] = "";
+		} else {
+			$data['payment']['amount'] += 0;
+		}
 		$data['toward_options'] = ['' => "Select"] + array_column($toward_options, 'towards', 'towards');
 		$view = [
 			'title' => 'Add Payment',

@@ -48,6 +48,7 @@
 				<th scope="col">Customer</th>
 				<th scope="col">Received Amount</th>
 				<th scope="col">Received Date</th>
+				<th scope="col">Edit</th>
 			</tr>
 		</thead>
 		<tbody>

@@ -99,8 +99,13 @@ class Ajaxtables extends CI_Controller {
 			$this->datatables->filter('t.date <=', date('Y-m-d 23:59:59', strtotime($this->input->post('filter')['to'])));
 		}
 		$this->datatables
-			->select('customer, amount, payment_date')
+			->select('customer, amount, payment_date, id')
 			// ->group_by('')
+			->edit_column(
+				'id',
+				'<button class="btn btn-info btn-sm" data-popup-view="add_payment" data-no-btn=1 data-modal-size="swal-wide" data-id=$1><i class="bi bi-pencil"></i> Edit</button>',
+				'id'
+			)
 			->from('customer_receipts');
 		$this->setSearchableColumns([0, 1, 2, 3, 4, 5]);
 		echo $this->datatables->generate();

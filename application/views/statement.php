@@ -25,9 +25,25 @@
 			<input type="date" class="form-control date-widget" placeholder="To Date" name="to_date" id="input-to">
 		</div>
 	</div>
+	<div class="p-2">
+		<?php
+		foreach ($date_options as $di => $date_group) {
+		?>
+			<button class="btn btn-secondary select-date" type="button" data-date-from="<?= $date_group['date_from'] ?>" data-date-to="<?= $date_group['date_to'] ?>"><?= $date_group['label'] ?></button>
+		<?php
+		}
+		?>
+	</div>
 	<div class="p-2 col-md-6">
 		<button class="btn btn-primary" type="submit">Print</button>
 	</div>
 </form>
+
+<script>
+	$(".select-date").on('click', function() {
+		$("#input-from").val($(this).data('date-from'));
+		$("#input-to").val($(this).data('date-to'));
+	});
+</script>
 
 <?= $this->load->view('includes/footer', [], true); ?>
