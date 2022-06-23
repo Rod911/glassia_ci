@@ -93,10 +93,10 @@ class Ajaxtables extends CI_Controller {
 			$this->datatables->where('TRIM(customer)', $this->input->post('filter')['towards']);
 		}
 		if ($this->input->post('filter')['from'] != '') {
-			$this->datatables->filter('t.date >=', date('Y-m-d', strtotime($this->input->post('filter')['from'])));
+			$this->datatables->filter('payment_date >=', date('Y-m-d', strtotime($this->input->post('filter')['from'])));
 		}
 		if ($this->input->post('filter')['to'] != '') {
-			$this->datatables->filter('t.date <=', date('Y-m-d 23:59:59', strtotime($this->input->post('filter')['to'])));
+			$this->datatables->filter('payment_date <=', date('Y-m-d 23:59:59', strtotime($this->input->post('filter')['to'])));
 		}
 		$this->datatables
 			->select('customer, amount, payment_date, id')
