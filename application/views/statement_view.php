@@ -1,3 +1,16 @@
+<?php
+$unfied_list = array_merge($statements, $customer_receipts);
+function compare($a, $b) {
+	$date1 = strtotime($a['date']);
+	$date2 = strtotime($b['date']);
+	return $date1 - $date2;
+}
+uasort($unfied_list, 'compare');
+
+if ($has_opening_balance) {
+	$opening_balance_amt = $opening_balance_invoices - $opening_balance_payments;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,10 +71,10 @@
 			<?php
 			}
 			?>
-			<caption>Invoices</caption>
 			<thead>
 				<tr>
-					<th class="px-2 text-nowrap">Bill No</th>
+					<th class="px-2 text-end">Date</th>
+					<th class="px-2 text-nowrap text-end">Bill No</th>
 					<?php
 					if ($customer == '') {
 					?>
@@ -69,19 +82,32 @@
 					<?php
 					}
 					?>
-					<th class="px-2 text-end">Amount</th>
-					<th class="px-2 text-end">Date</th>
+					<th class="px-2 text-end">Bill Amount</th>
+					<th class="px-2 text-end">Received</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php
-				$paid = 0;
-				$total = 0;
-				foreach ($statements as $si => $stm) {
-					$total += $stm['invoice_total'];
+				if ($has_opening_balance) {
 				?>
 					<tr>
-						<td class="px-2"><?= $stm['bill_no'] ?></td>
+						<td class="px-2 text-end">Opening (up to: <?= $opening_balance_date ?>)</td>
+						<td></td>
+						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_invoices, 2) ?></b></td>
+						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_payments, 2) ?></b></td>
+						<!-- <td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_amt, 2) ?></b></td> -->
+					</tr>
+				<?php
+				}
+				?>
+				<?php
+				$paid = 0;
+				$total = 0;
+				foreach ($unfied_list as $si => $stm) {
+				?>
+					<tr>
+						<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
+						<td class="px-2 text-end font-monospace"><?= $stm['bill_no'] ?></td>
 						<?php
 						if ($customer == '') {
 						?>
@@ -89,97 +115,57 @@
 						<?php
 						}
 						?>
-						<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
-						<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['date'])) ?></td>
-					</tr>
-				<?php
-				}
-				?>
-			</tbody>
-		</table>
-		<?php
-		if (count($customer_receipts) > 0) {
-		?>
-			<table class="table table-bordered table-sm">
-				<caption>Payment Received</caption>
-				<thead>
-					<tr>
 						<?php
-						if ($customer == '') {
+						if ($stm['type'] == "i") {
+							$total += $stm['invoice_total'];
 						?>
-							<th class="px-2">Customer</th>
+							<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
+							<td></td>
+						<?php
+						} elseif ($stm['type'] == "r") {
+							$paid += $stm['amount'];
+						?>
+							<td></td>
+							<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
 						<?php
 						}
 						?>
-						<th class="px-2 text-end">Amount</th>
-						<th class="px-2 text-end">Date</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-					foreach ($customer_receipts as $si => $stm) {
-						$paid += $stm['amount'];
-					?>
-						<tr>
-							<?php
-							if ($customer == '') {
-							?>
-								<td class="px-2"><?= $stm['customer'] ?></td>
-							<?php
-							}
-							?>
-							<td class="px-2 text-end font-monospace"><?= number_format($stm['amount'], 2) ?></td>
-							<td class="px-2 text-end text-nowrap"><?= date('d-m-Y', strtotime($stm['payment_date'])) ?></td>
-						</tr>
-					<?php
-					}
-					?>
-				</tbody>
-			</table>
-		<?php
-		}
-		?>
-		<table class="table table-bordered table-sm">
-			<thead>
-				<tr>
-					<?php
-					if ($has_opening_balance) {
-					?>
-						<th></th>
-					<?php
-					}
-					?>
-					<th class="px-2 text-end">Invoice Total</th>
-					<th class="px-2 text-end">Payment Total</th>
-					<th class="px-2 text-end">Balance</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				$opening_balance_amt = 0;
-				if ($has_opening_balance) {
-					$opening_balance_amt = $opening_balance_invoices - $opening_balance_payments;
-				?>
-					<tr>
-						<td class="px-2">Opening (up to: <?= $opening_balance_date ?>)</td>
-						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_invoices, 2) ?></b></td>
-						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_payments, 2) ?></b></td>
-						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_amt, 2) ?></b></td>
 					</tr>
 				<?php
 				}
+				$current_invoices = $opening_balance_invoices + $total;
+				$current_payments = $opening_balance_payments + $paid;
+				$current_balance = $opening_balance_amt + $total - $paid;
+				$balance_sheet = $current_invoices > $current_payments ? $current_invoices : $current_payments;
 				?>
 				<tr>
+					<td></td>
+					<td></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($total, 2) ?></b></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($paid, 2) ?></b></td>
+				</tr>
+				<tr>
+					<td class="px-2 text-end">Closing Balance</td>
+					<td></td>
 					<?php
-					if ($has_opening_balance && $has_closing_balance) {
+					if ($current_balance > 0) {
 					?>
-						<td class="px-2">Current (<?= $from_date ?> - <?= $to_date ?>)</td>
+						<td></td>
+						<td class="px-2 text-end font-monospace"><b><?= number_format($current_balance, 2) ?></b></td>
+					<?php
+					} else {
+					?>
+						<td class="px-2 text-end font-monospace"><b><?= number_format($current_balance, 2) ?></b></td>
+						<td></td>
 					<?php
 					}
 					?>
-					<td class="px-2 text-end font-monospace"><b><?= number_format($total, 2) ?></b></td>
-					<td class="px-2 text-end font-monospace"><b><?= number_format($paid, 2) ?></b></td>
-					<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_amt + $total - $paid, 2) ?></b></td>
+				</tr>
+				<tr class="bg-light">
+					<td></td>
+					<td></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($balance_sheet, 2)  ?></b></td>
+					<td class="px-2 text-end font-monospace"><b><?= number_format($balance_sheet, 2) ?></b></td>
 				</tr>
 			</tbody>
 		</table>

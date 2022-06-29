@@ -181,7 +181,7 @@ class Home extends CI_Controller {
 			$this->db->where('towards', $customer);
 		}
 		$data['statements'] = $this->db
-			// ->select('t.*')
+			->select('t.*, "i" as type')
 			// ->select_sum('r.received_amt', 'received_amt')
 			->order_by('t.bill_no')
 			->from('tax_invoices t')
@@ -200,6 +200,7 @@ class Home extends CI_Controller {
 		}
 		$data['customer'] = $customer;
 		$data['customer_receipts'] = $this->db
+			->select('*, payment_date as date, "r" as type, "" as bill_no, customer as towards, amount as invoice_total')
 			->order_by('payment_date')
 			->get('customer_receipts')
 			->result_array();
