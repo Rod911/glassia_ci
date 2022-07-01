@@ -262,4 +262,18 @@ class Home extends CI_Controller {
 
 		redirect(base_url('home/payments'));
 	}
+
+	public function makeRecoverySQL($table) {
+		$records = $this->db->get($table)->result_array();
+		$insert_sql = "INSERT INTO `$table` VALUES ";
+		$insert_values = [];
+		foreach ($records as $i => $row) {
+			$row_values = array_values($row);
+			$insert_values[] = "\n(`" . implode('`,`', $row_values) . "`)";
+		}
+		$insert_sql .= implode(', ', $insert_values) . ";";
+		header("Content-type: text/plain");
+		header("Content-Disposition: attachment; filename=$table.sql");
+		echo $insert_sql;
+	}
 }
