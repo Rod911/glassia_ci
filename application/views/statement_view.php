@@ -101,6 +101,7 @@ if ($has_opening_balance) {
 						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_invoices, 2) ?></b></td>
 						<td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_payments, 2) ?></b></td>
 						<!-- <td class="px-2 text-end font-monospace"><b><?= number_format($opening_balance_amt, 2) ?></b></td> -->
+						<td></td>
 					</tr>
 				<?php
 				}
