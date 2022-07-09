@@ -9,6 +9,10 @@ uasort($unfied_list, 'compare');
 
 if ($has_opening_balance) {
 	$opening_balance_amt = $opening_balance_invoices - $opening_balance_payments;
+} else {
+	$opening_balance_amt = 0;
+	$opening_balance_invoices = 0;
+	$opening_balance_payments = 0;
 }
 ?>
 <!DOCTYPE html>
@@ -84,6 +88,7 @@ if ($has_opening_balance) {
 					?>
 					<th class="px-2 text-end">Bill Amount</th>
 					<th class="px-2 text-end">Received</th>
+					<th class="px-2 text-end">Balance</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -103,6 +108,7 @@ if ($has_opening_balance) {
 				<?php
 				$paid = 0;
 				$total = 0;
+				$active_balance = $opening_balance_amt;
 				foreach ($unfied_list as $si => $stm) {
 				?>
 					<tr>
@@ -118,18 +124,21 @@ if ($has_opening_balance) {
 						<?php
 						if ($stm['type'] == "i") {
 							$total += $stm['invoice_total'];
+							$active_balance += $stm['invoice_total'];
 						?>
 							<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
 							<td></td>
 						<?php
 						} elseif ($stm['type'] == "r") {
 							$paid += $stm['amount'];
+							$active_balance -= $stm['amount'];
 						?>
 							<td></td>
 							<td class="px-2 text-end font-monospace"><?= number_format($stm['invoice_total'], 2) ?></td>
 						<?php
 						}
 						?>
+						<td class="px-2 text-end font-monospace"><?= number_format($active_balance, 2) ?></td>
 					</tr>
 				<?php
 				}
@@ -143,6 +152,7 @@ if ($has_opening_balance) {
 					<td></td>
 					<td class="px-2 text-end font-monospace"><b><?= number_format($total, 2) ?></b></td>
 					<td class="px-2 text-end font-monospace"><b><?= number_format($paid, 2) ?></b></td>
+					<td></td>
 				</tr>
 				<tr>
 					<td class="px-2 text-end">Closing Balance</td>
@@ -160,12 +170,14 @@ if ($has_opening_balance) {
 					<?php
 					}
 					?>
+					<td></td>
 				</tr>
 				<tr class="bg-light">
 					<td></td>
 					<td></td>
 					<td class="px-2 text-end font-monospace"><b><?= number_format($balance_sheet, 2)  ?></b></td>
 					<td class="px-2 text-end font-monospace"><b><?= number_format($balance_sheet, 2) ?></b></td>
+					<td></td>
 				</tr>
 			</tbody>
 		</table>
